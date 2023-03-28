@@ -46,36 +46,27 @@ export default function Home({ filter }) {
         <div className={styles.header}>
           <h1 className={styles.title}>Python Repositories</h1>
           <div className={styles.filterLinks}>
-            <Link href="/?filter=past_day">
-              <span
-                className={`${styles.filterButton} ${
-                  currentFilter === 'past_day' ? styles.selectedFilter : ''
+            <Link href="/?filter=past_day"
+              className={`${styles.filterButton} ${currentFilter === 'past_day' ? styles.selectedFilter : ''
                 }`}
-              >
-                Past Day
-              </span>
+            >
+              Past Day
             </Link>
             <span className={styles.separator}>|</span>
-            <Link href="/?filter=past_three_days">
-              <span
-                className={`${styles.filterButton} ${
-                  currentFilter === 'past_three_days'
-                    ? styles.selectedFilter
-                    : ''
+            <Link href="/?filter=past_three_days"
+              className={`${styles.filterButton} ${currentFilter === 'past_three_days'
+                ? styles.selectedFilter
+                : ''
                 }`}
-              >
-                Past Three Days
-              </span>
+            >
+              Past Three Days
             </Link>
             <span className={styles.separator}>|</span>
-            <Link href="/?filter=past_week">
-              <span
-                className={`${styles.filterButton} ${
-                  currentFilter === 'past_week' ? styles.selectedFilter : ''
+            <Link href="/?filter=past_week"
+              className={`${styles.filterButton} ${currentFilter === 'past_week' ? styles.selectedFilter : ''
                 }`}
-              >
-                Past Week
-              </span>
+            >
+              Past Week
             </Link>
           </div>
         </div>
@@ -84,9 +75,8 @@ export default function Home({ filter }) {
           {repos.map((repo, index) => (
             <li
               key={repo.id}
-              className={`${styles.listItem} ${
-                index % 2 === 1 ? styles.odd : ''
-              }`}
+              className={`${styles.listItem} ${index % 2 === 1 ? styles.odd : ''
+                }`}
             >
               <span className={styles.index}>{index + 1}. </span>
               <div className={styles.repoContent}>
@@ -106,7 +96,7 @@ export default function Home({ filter }) {
             </li>
           ))}
         </ul>
-      </main>
+      </main >
 
       <footer className={styles.footer}>
         <a
@@ -118,7 +108,7 @@ export default function Home({ filter }) {
           Fork me on GitHub
         </a>
       </footer>
-    </div>
+    </div >
   )
 }
 
