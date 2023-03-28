@@ -1,0 +1,27 @@
+name: Update Repositories
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Run every hour
+
+jobs:
+  update_repos:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Call updateRepos script
+      run: npm run updateRepos
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
