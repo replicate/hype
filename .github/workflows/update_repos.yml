@@ -3,6 +3,7 @@ name: Update Repositories
 on:
   schedule:
     - cron: '0 * * * *' # Run every hour
+  workflow_dispatch:
 
 jobs:
   update_repos:
