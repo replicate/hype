@@ -11,6 +11,7 @@
   padding: 10px 0 0 0;
   margin: 0 0 0 0;
   background-color: #f6f6ef;
+  position: relative;
 }
 
 .listItem {
@@ -73,6 +74,15 @@
   margin: 0;
   padding: 0;
   margin-right: 1.5rem;
+  text-decoration: none;
+}
+
+.title:hover {
+  text-decoration: underline;
+}
+
+.hoverLink:hover {
+   text-decoration: underline;
 }
 
 .filterLinks {
@@ -88,7 +98,6 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  margin-right: 1rem;
   text-decoration: none;
   font-weight: 700;
 }
@@ -107,7 +116,7 @@
 
 .separator {
   color: #ffffff;
-  margin-right: 1rem;
+  margin: 0 1rem 0 1rem;
 }
 
 .footer {
@@ -127,4 +136,11 @@
 
 .footerLink:hover {
   text-decoration: underline;
+}
+
+.lastUpdated {
+  font-size: 0.8rem;
+  color: #828282;
+  margin: 0;
+  text-align: "right";
 }

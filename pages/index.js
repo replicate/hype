@@ -1,26 +1,35 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { getPythonRepos } from '../lib/repos'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getPythonRepos } from "../lib/repos";
+import styles from "../styles/Home.module.css";
+import supabase from "lib/supabase";
+import { timeSince } from "lib/utils";
 
 export default function Home({ filter }) {
-  const [repos, setRepos] = useState([])
-  const [currentFilter, setCurrentFilter] = useState(filter)
+  const [repos, setRepos] = useState([]);
+  const [currentFilter, setCurrentFilter] = useState(filter);
+  const [lastUpdated, setLastUpdated] = useState("");
 
   useEffect(() => {
     async function loadRepos() {
-      const newRepos = await getPythonRepos(currentFilter)
-      console.log(currentFilter)
-      setRepos(newRepos)
+      const { data: lastUpdated } = await supabase.rpc(
+        "repositories_last_modified"
+      );
+      const date = new Date(lastUpdated);
+      setLastUpdated(`${timeSince(date)} ago`);
+
+      const newRepos = await getPythonRepos(currentFilter);
+      console.log(currentFilter);
+      setRepos(newRepos);
     }
-    loadRepos()
-  }, [currentFilter])
+    loadRepos();
+  }, [currentFilter]);
 
   useEffect(() => {
-    setCurrentFilter(filter)
-    setRepos([])
-  }, [filter])
+    setCurrentFilter(filter);
+    setRepos([]);
+  }, [filter]);
 
   return (
     <div className={styles.container}>
@@ -44,39 +53,73 @@ export default function Home({ filter }) {
 
       <main className={styles.main}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Python Repositories</h1>
+          <a
+            href="https://github.com/andreasjansson/python-repos"
+            className={styles.title}
+          >
+            Python Repositories{" "}
+          </a>
           <div className={styles.filterLinks}>
-            <Link href="/?filter=past_day"
-              className={`${styles.filterButton} ${currentFilter === 'past_day' ? styles.selectedFilter : ''
-                }`}
+            <Link
+              href="/?filter=past_day"
+              className={`${styles.filterButton} ${
+                currentFilter === "past_day" ? styles.selectedFilter : ""
+              }`}
             >
               Past Day
             </Link>
             <span className={styles.separator}>|</span>
-            <Link href="/?filter=past_three_days"
-              className={`${styles.filterButton} ${currentFilter === 'past_three_days'
-                ? styles.selectedFilter
-                : ''
-                }`}
+            <Link
+              href="/?filter=past_three_days"
+              className={`${styles.filterButton} ${
+                currentFilter === "past_three_days" ? styles.selectedFilter : ""
+              }`}
             >
               Past Three Days
             </Link>
             <span className={styles.separator}>|</span>
-            <Link href="/?filter=past_week"
-              className={`${styles.filterButton} ${currentFilter === 'past_week' ? styles.selectedFilter : ''
-                }`}
+            <Link
+              href="/?filter=past_week"
+              className={`${styles.filterButton} ${
+                currentFilter === "past_week" ? styles.selectedFilter : ""
+              }`}
             >
               Past Week
             </Link>
           </div>
+          <div
+            className={styles.hoverLink}
+            style={{
+              display: "flex",
+              paddingTop: "0.4rem",
+              justifyContent: "space-between",
+              fontSize: "0.8rem",
+              fontWeight: "lighter",
+            }}
+          ></div>
         </div>
 
         <ul className={styles.list}>
+          <Link
+            classname={styles.hoverlink}
+            href="https://github.com/andreasjansson/python-repos/actions"
+            style={{
+              textDecoration: "none",
+              color: "gray",
+              fontSize: "0.8rem",
+              position: "absolute",
+              right: "0.5rem",
+              top: "0.5rem",
+            }}
+          >
+            Last updated {lastUpdated}
+          </Link>
           {repos.map((repo, index) => (
             <li
               key={repo.id}
-              className={`${styles.listItem} ${index % 2 === 1 ? styles.odd : ''
-                }`}
+              className={`${styles.listItem} ${
+                index % 2 === 1 ? styles.odd : ""
+              }`}
             >
               <span className={styles.index}>{index + 1}. </span>
               <div className={styles.repoContent}>
@@ -96,9 +139,13 @@ export default function Home({ filter }) {
             </li>
           ))}
         </ul>
-      </main >
+      </main>
 
       <footer className={styles.footer}>
+        <a className={styles.footerLink} href="https://replicate.com">
+          Built by Replicate
+        </a>
+        <span className={styles.separator}>|</span>
         <a
           href="https://github.com/andreasjansson/python-repos"
           target="_blank"
@@ -108,15 +155,15 @@ export default function Home({ filter }) {
           Fork me on GitHub
         </a>
       </footer>
-    </div >
-  )
+    </div>
+  );
 }
 
 export async function getServerSideProps(context) {
-  const filter = context.query.filter || 'past_week'
+  const filter = context.query.filter || "past_week";
   return {
     props: {
       filter,
     },
-  }
+  };
 }
