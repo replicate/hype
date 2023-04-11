@@ -1,10 +1,10 @@
+import supabase from "lib/supabase";
+import { timeSince } from "lib/utils";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getPythonRepos } from "../lib/repos";
 import styles from "../styles/Home.module.css";
-import supabase from "lib/supabase";
-import { timeSince } from "lib/utils";
 
 export default function Home({ filter }) {
   const [repos, setRepos] = useState([]);
@@ -62,27 +62,24 @@ export default function Home({ filter }) {
           <div className={styles.filterLinks}>
             <Link
               href="/?filter=past_day"
-              className={`${styles.filterButton} ${
-                currentFilter === "past_day" ? styles.selectedFilter : ""
-              }`}
+              className={`${styles.filterButton} ${currentFilter === "past_day" ? styles.selectedFilter : ""
+                }`}
             >
               Past Day
             </Link>
             <span className={styles.separator}>|</span>
             <Link
               href="/?filter=past_three_days"
-              className={`${styles.filterButton} ${
-                currentFilter === "past_three_days" ? styles.selectedFilter : ""
-              }`}
+              className={`${styles.filterButton} ${currentFilter === "past_three_days" ? styles.selectedFilter : ""
+                }`}
             >
               Past Three Days
             </Link>
             <span className={styles.separator}>|</span>
             <Link
               href="/?filter=past_week"
-              className={`${styles.filterButton} ${
-                currentFilter === "past_week" ? styles.selectedFilter : ""
-              }`}
+              className={`${styles.filterButton} ${currentFilter === "past_week" ? styles.selectedFilter : ""
+                }`}
             >
               Past Week
             </Link>
@@ -101,7 +98,7 @@ export default function Home({ filter }) {
 
         <ul className={styles.list}>
           <Link
-            classname={styles.hoverlink}
+            className={styles.hoverlink}
             href="https://github.com/andreasjansson/python-repos/actions"
             style={{
               textDecoration: "none",
@@ -117,9 +114,8 @@ export default function Home({ filter }) {
           {repos.map((repo, index) => (
             <li
               key={repo.id}
-              className={`${styles.listItem} ${
-                index % 2 === 1 ? styles.odd : ""
-              }`}
+              className={`${styles.listItem} ${index % 2 === 1 ? styles.odd : ""
+                }`}
             >
               <span className={styles.index}>{index + 1}. </span>
               <div className={styles.repoContent}>
@@ -132,7 +128,14 @@ export default function Home({ filter }) {
                   >
                     {repo.username}/{repo.name}
                   </a>
-                  <span className={styles.stars}>⭐ {repo.stars}</span>
+                  <span className={styles.stars}>
+                    {repo.source === 'huggingface' ? (
+                      "🤗 "
+                    ) : (
+                      "⭐ "
+                    )}
+                    {repo.stars}
+                  </span>
                 </div>
                 <p className={styles.description}>{repo.description}</p>
               </div>
