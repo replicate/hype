@@ -23,5 +23,5 @@ Then start the app locally
 vercel dev
 ```
 
-# Want to run open source machine learning models yourself? 
-Check out [Replicate](https://replicate.com)
+### Want to run machine learning models yourself? 
+Check out [Replicate](https://replicate.com). We make it easy to run, push, and scale machine learning models.
