@@ -1,8 +1,8 @@
-# Python Repositories
+# Trending Python Repositories
 
 https://python-repos.vercel.app
 
-It's really hard to keep up with open source machine learning. Since (almost) every new Python repo on GitHub is an ML repo, let's just list all the latest Python repos in an easily readable format (i.e. HN-style).
+It's really hard to keep up with open source machine learning. Since (almost) every new Python repo on GitHub is an ML repo, let's just list all the latest GitHub/HuggingFace Python repos in an easily readable format (i.e. HN-style).
 
 This website is updated daily by pulling the 500 most starred repos from the past week from GitHub and HuggingFace. It can be filtered by repos created in the past week, past 3 days, and past day.
 
