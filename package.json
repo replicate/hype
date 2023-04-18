@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "updateRepos": "tsx scripts/updateRepos.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.12.1",
@@ -23,8 +24,5 @@
     "@types/node": "18.15.10",
     "@types/react": "18.0.29",
     "tsx": "^3.12.6"
-  },
-  "scripts": {
-    "updateRepos": "tsx scripts/updateRepos.js"
   }
 }

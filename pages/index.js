@@ -43,7 +43,7 @@ export default function Home({ filter }) {
       </div>
 
       <Head>
-        <title>Python GitHub Repositories</title>
+        <title>Trending Python Repositories</title>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0"
@@ -57,29 +57,47 @@ export default function Home({ filter }) {
             href="https://github.com/andreasjansson/python-repos"
             className={styles.title}
           >
-            Python Repositories{" "}
+            TrendingPython
+          </a>
+          <span
+            style={{
+              fontSize: "1.3rem",
+              paddingLeft: "0.5rem",
+              color: "white",
+            }}
+          >
+            |
+          </span>
+          <a
+            className={styles.title}
+            href="https://github.com/andreasjansson/python-repos#readme"
+          >
+             What is this?
           </a>
           <div className={styles.filterLinks}>
             <Link
               href="/?filter=past_day"
-              className={`${styles.filterButton} ${currentFilter === "past_day" ? styles.selectedFilter : ""
-                }`}
+              className={`${styles.filterButton} ${
+                currentFilter === "past_day" ? styles.selectedFilter : ""
+              }`}
             >
               Past Day
             </Link>
             <span className={styles.separator}>|</span>
             <Link
               href="/?filter=past_three_days"
-              className={`${styles.filterButton} ${currentFilter === "past_three_days" ? styles.selectedFilter : ""
-                }`}
+              className={`${styles.filterButton} ${
+                currentFilter === "past_three_days" ? styles.selectedFilter : ""
+              }`}
             >
               Past Three Days
             </Link>
             <span className={styles.separator}>|</span>
             <Link
               href="/?filter=past_week"
-              className={`${styles.filterButton} ${currentFilter === "past_week" ? styles.selectedFilter : ""
-                }`}
+              className={`${styles.filterButton} ${
+                currentFilter === "past_week" ? styles.selectedFilter : ""
+              }`}
             >
               Past Week
             </Link>
@@ -95,7 +113,6 @@ export default function Home({ filter }) {
             }}
           ></div>
         </div>
-
         <ul className={styles.list}>
           <Link
             className={styles.hoverlink}
@@ -114,8 +131,9 @@ export default function Home({ filter }) {
           {repos.map((repo, index) => (
             <li
               key={repo.id}
-              className={`${styles.listItem} ${index % 2 === 1 ? styles.odd : ""
-                }`}
+              className={`${styles.listItem} ${
+                index % 2 === 1 ? styles.odd : ""
+              }`}
             >
               <span className={styles.index}>{index + 1}. </span>
               <div className={styles.repoContent}>
@@ -129,11 +147,7 @@ export default function Home({ filter }) {
                     {repo.username}/{repo.name}
                   </a>
                   <span className={styles.stars}>
-                    {repo.source === 'huggingface' ? (
-                      "🤗 "
-                    ) : (
-                      "⭐ "
-                    )}
+                    {repo.source === "huggingface" ? "🤗 " : "⭐ "}
                     {repo.stars}
                   </span>
                 </div>
