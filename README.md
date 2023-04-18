@@ -1,6 +1,6 @@
 # Trending Python Repositories
 
-https://python-repos.vercel.app
+https://trendingpython.com
 
 It's really hard to keep up with open source machine learning. Since (almost) every new Python repo on GitHub is an ML repo, let's just list all the latest GitHub/HuggingFace Python repos in an easily readable format (i.e. HN-style).
 
