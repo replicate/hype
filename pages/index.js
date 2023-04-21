@@ -5,10 +5,15 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getPythonRepos } from "../lib/repos";
 import styles from "../styles/Home.module.css";
+import { useRouter } from "next/router";
 
 export default function Home({ filter }) {
+  const router = useRouter();
+  const params = router.query;
+
   const [repos, setRepos] = useState([]);
-  const [currentFilter, setCurrentFilter] = useState(filter);
+  const [currentFilter, setCurrentFilter] = useState(params.filter);
+  const [currentSource, setCurrentSource] = useState(params.source);
   const [lastUpdated, setLastUpdated] = useState("");
 
   useEffect(() => {
@@ -19,7 +24,7 @@ export default function Home({ filter }) {
       const date = new Date(lastUpdated);
       setLastUpdated(`${timeSince(date)} ago`);
 
-      const newRepos = await getPythonRepos(currentFilter);
+      const newRepos = await getPythonRepos(currentFilter, currentSource);
       console.log(currentFilter);
       setRepos(newRepos);
     }
