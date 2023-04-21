@@ -16,6 +16,18 @@ export default function Home({ filter }) {
   const [currentSource, setCurrentSource] = useState(params.source);
   const [lastUpdated, setLastUpdated] = useState("");
 
+  async function handleSourceChange(source) {
+    source = source.toLowerCase();
+    setCurrentSource(source);
+    router.push({ query: { ...router.query, source: source } }, undefined, {
+      shallow: true,
+    });
+
+    setRepos([]);
+    const newRepos = await getPythonRepos(currentFilter, source);
+    setRepos(newRepos);
+  }
+
   useEffect(() => {
     async function loadRepos() {
       const { data: lastUpdated } = await supabase.rpc(
@@ -25,7 +37,6 @@ export default function Home({ filter }) {
       setLastUpdated(`${timeSince(date)} ago`);
 
       const newRepos = await getPythonRepos(currentFilter, currentSource);
-      console.log(currentFilter);
       setRepos(newRepos);
     }
     loadRepos();
@@ -119,9 +130,8 @@ export default function Home({ filter }) {
           ></div>
         </div>
         <ul className={styles.list}>
-          <Link
-            className={styles.hoverlink}
-            href="https://github.com/andreasjansson/python-repos/actions"
+          {/*write a select dropdown  */}
+          <div
             style={{
               textDecoration: "none",
               color: "gray",
@@ -131,8 +141,27 @@ export default function Home({ filter }) {
               top: "0.5rem",
             }}
           >
-            Last updated {lastUpdated}
-          </Link>
+            <select
+              style={{ marginRight: "0.5rem" }}
+              defaultValue={currentSource}
+              onChange={(e) => handleSourceChange(e.target.value)}
+            >
+              <option value="all">All</option>
+              <option value="github">GitHub</option>
+              <option value="huggingface">HuggingFace</option>
+            </select>
+            <Link
+              style={{
+                textDecoration: "none",
+                color: "gray",
+              }}
+              className={styles.hoverlink}
+              href="https://github.com/andreasjansson/python-repos/actions"
+            >
+              Last updated {lastUpdated}
+            </Link>
+          </div>
+
           {repos.map((repo, index) => (
             <li
               key={repo.id}
