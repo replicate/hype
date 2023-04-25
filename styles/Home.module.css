@@ -62,10 +62,11 @@
 
 .header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-flow: row wrap;
     background-color: #ff3d00;
     padding: 1rem;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .title {
@@ -77,6 +78,14 @@
 
 .title:hover {
     text-decoration: underline;
+}
+
+.what {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    margin-left: 10px;
 }
 
 .hoverLink:hover {
@@ -141,4 +150,25 @@
     color: #828282;
     margin: 0;
     text-align: "right";
+}
+
+@media (max-width: 700px) {
+    .lastUpdated {
+        display: none;
+    }
+
+    .titleBreak {
+        flex-basis: 100%;
+        width: 0px;
+        height: 0px;
+        overflow: hidden;
+    }
+
+    .what, .filterButton {
+        font-size: 0.9rem;
+        text-align: left;
+        align-items: left;
+        justify-content: left;
+        margin-left: 0;
+    }
 }

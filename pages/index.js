@@ -2,10 +2,10 @@ import supabase from "lib/supabase";
 import { timeSince } from "lib/utils";
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getPythonRepos } from "../lib/repos";
 import styles from "../styles/Home.module.css";
-import { useRouter } from "next/router";
 
 export default function Home({ filter }) {
   const router = useRouter();
@@ -81,39 +81,37 @@ export default function Home({ filter }) {
               paddingLeft: "0.5rem",
               color: "white",
             }}
+            className={styles.titleBreak}
           >
             |
           </span>
           <a
-            className={styles.title}
+            className={styles.what}
             href="https://github.com/andreasjansson/python-repos#readme"
           >
-             What is this?
+            What is this?
           </a>
           <div className={styles.filterLinks}>
             <Link
               href="/?filter=past_day"
-              className={`${styles.filterButton} ${
-                currentFilter === "past_day" ? styles.selectedFilter : ""
-              }`}
+              className={`${styles.filterButton} ${currentFilter === "past_day" ? styles.selectedFilter : ""
+                }`}
             >
               Past Day
             </Link>
             <span className={styles.separator}>|</span>
             <Link
               href="/?filter=past_three_days"
-              className={`${styles.filterButton} ${
-                currentFilter === "past_three_days" ? styles.selectedFilter : ""
-              }`}
+              className={`${styles.filterButton} ${currentFilter === "past_three_days" ? styles.selectedFilter : ""
+                }`}
             >
               Past Three Days
             </Link>
             <span className={styles.separator}>|</span>
             <Link
               href="/?filter=past_week"
-              className={`${styles.filterButton} ${
-                currentFilter === "past_week" ? styles.selectedFilter : ""
-              }`}
+              className={`${styles.filterButton} ${currentFilter === "past_week" ? styles.selectedFilter : ""
+                }`}
             >
               Past Week
             </Link>
@@ -155,7 +153,7 @@ export default function Home({ filter }) {
                 textDecoration: "none",
                 color: "gray",
               }}
-              className={styles.hoverlink}
+              className={styles.lastUpdated}
               href="https://github.com/andreasjansson/python-repos/actions"
             >
               Last updated {lastUpdated}
@@ -165,9 +163,8 @@ export default function Home({ filter }) {
           {repos.map((repo, index) => (
             <li
               key={repo.id}
-              className={`${styles.listItem} ${
-                index % 2 === 1 ? styles.odd : ""
-              }`}
+              className={`${styles.listItem} ${index % 2 === 1 ? styles.odd : ""
+                }`}
             >
               <span className={styles.index}>{index + 1}. </span>
               <div className={styles.repoContent}>
