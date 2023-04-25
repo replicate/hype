@@ -69,12 +69,12 @@ export default function Home({ filter }) {
 
       <main className={styles.main}>
         <div className={styles.header}>
-          <a
+          <Link
             href="/"
             className={styles.title}
           >
             TrendingPython
-          </a>
+          </Link>
           <span
             style={{
               fontSize: "1.3rem",
