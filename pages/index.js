@@ -70,7 +70,7 @@ export default function Home({ filter }) {
       <main className={styles.main}>
         <div className={styles.header}>
           <a
-            href="https://github.com/andreasjansson/python-repos"
+            href="/"
             className={styles.title}
           >
             TrendingPython
