@@ -65,6 +65,9 @@ export default function Home({ filter }) {
           content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0"
         />
         <link rel="icon" href="/favicon.ico" />
+        <meta property="og:title" content="TrendingPython" />
+        <meta name="description" content="Trending machine learning repos" />
+        <meta name="og:image" content="/og.png" />
       </Head>
 
       <main className={styles.main}>
