@@ -68,14 +68,13 @@ export default function Home({ filter }) {
         <meta property="og:title" content="TrendingPython" />
         <meta name="description" content="Trending machine learning repos" />
         <meta name="og:image" content="/og.png" />
+        <meta property="twitter:image" content="/og.png" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <main className={styles.main}>
         <div className={styles.header}>
-          <Link
-            href="/"
-            className={styles.title}
-          >
+          <Link href="/" className={styles.title}>
             TrendingPython
           </Link>
           <span
@@ -97,24 +96,27 @@ export default function Home({ filter }) {
           <div className={styles.filterLinks}>
             <Link
               href="/?filter=past_day"
-              className={`${styles.filterButton} ${currentFilter === "past_day" ? styles.selectedFilter : ""
-                }`}
+              className={`${styles.filterButton} ${
+                currentFilter === "past_day" ? styles.selectedFilter : ""
+              }`}
             >
               Past Day
             </Link>
             <span className={styles.separator}>|</span>
             <Link
               href="/?filter=past_three_days"
-              className={`${styles.filterButton} ${currentFilter === "past_three_days" ? styles.selectedFilter : ""
-                }`}
+              className={`${styles.filterButton} ${
+                currentFilter === "past_three_days" ? styles.selectedFilter : ""
+              }`}
             >
               Past Three Days
             </Link>
             <span className={styles.separator}>|</span>
             <Link
               href="/?filter=past_week"
-              className={`${styles.filterButton} ${currentFilter === "past_week" ? styles.selectedFilter : ""
-                }`}
+              className={`${styles.filterButton} ${
+                currentFilter === "past_week" ? styles.selectedFilter : ""
+              }`}
             >
               Past Week
             </Link>
@@ -166,8 +168,9 @@ export default function Home({ filter }) {
           {repos.map((repo, index) => (
             <li
               key={repo.id}
-              className={`${styles.listItem} ${index % 2 === 1 ? styles.odd : ""
-                }`}
+              className={`${styles.listItem} ${
+                index % 2 === 1 ? styles.odd : ""
+              }`}
             >
               <span className={styles.index}>{index + 1}. </span>
               <div className={styles.repoContent}>
