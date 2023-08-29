@@ -53,29 +53,29 @@ export default function Home({ filter }) {
   }, [filter]);
 
   return (
-    <div className="container mx-auto font-sans">
+    <div className="container mx-auto font-sans overflow-x-hidden">
       <Head>
         {/* Your Head content */}
       </Head>
 
       <main className="md:px-4">
-        <div className="flex justify-between items-center bg-red-600 px-4 py-2 text-md">
-          <Link href="/" className="text-white font-bold hover:underline">
+        <div className="flex justify-between items-center bg-red-600 px-4 py-2">
+          <Link href="/" className="text-white font-bold hover:underline text-md">
             AI News
           </Link>
-          <a href="https://github.com/andreasjansson/python-repos#readme" className="text-white ml-4 hover:underline">
+          <a href="https://github.com/andreasjansson/python-repos#readme" className="text-white ml-4 hover:underline text-ssm">
             What is this?
           </a>
           <div className="flex items-center ml-auto">
-            <Link href="/?filter=past_day" className={`text-white ${currentFilter === "past_day" ? "underline" : ""}`}>
-              Past Day
+            <Link href="/?filter=past_day" className={`text-ssm text-white ${currentFilter === "past_day" ? "underline" : ""}`}>
+              Past day
             </Link>
-            <span className="text-white mx-4">|</span>
-            <Link href="/?filter=past_three_days" className={`text-white ${currentFilter === "past_three_days" ? "underline" : ""}`}>
+            <span className="text-white sm:mx-4 mx-1">|</span>
+            <Link href="/?filter=past_three_days" className={`text-ssm text-white ${currentFilter === "past_three_days" ? "underline" : ""}`}>
               Past three days
             </Link>
-            <span className="text-white mx-4">|</span>
-            <Link href="/?filter=past_week" className={`text-white ${currentFilter === "past_week" || !currentFilter ? "underline" : ""}`}>
+            <span className="text-white sm:mx-4 mx-1">|</span>
+            <Link href="/?filter=past_week" className={`text-ssm text-white ${currentFilter === "past_week" || !currentFilter ? "underline" : ""}`}>
               Past week
             </Link>
           </div>
