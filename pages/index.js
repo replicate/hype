@@ -4,27 +4,31 @@ import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getPythonRepos } from "../lib/repos";
-import styles from "../styles/Home.module.css";
+import { PostRow } from "../components/PostRow";
+import { SourcePicker } from "../components/SourcePicker";
+import { getContent } from "../lib/content";
 
 export default function Home({ filter }) {
   const router = useRouter();
   const params = router.query;
 
+  console.log("filter", filter);
+
   const [repos, setRepos] = useState([]);
   const [currentFilter, setCurrentFilter] = useState(params.filter);
-  const [currentSource, setCurrentSource] = useState(params.source);
+  const [sources, setSources] = useState(params.sources ? params.sources.split(",") : ["GitHub", "HuggingFace"]);
   const [lastUpdated, setLastUpdated] = useState("");
 
-  async function handleSourceChange(source) {
-    source = source.toLowerCase();
-    setCurrentSource(source);
-    router.push({ query: { ...router.query, source: source } }, undefined, {
+  async function handleSourceChange(sources) {
+    console.log("sources", sources);
+
+    setSources(sources);
+    router.push({ query: { ...router.query, sources: sources.join(",") } }, undefined, {
       shallow: true,
     });
 
-    setRepos([]);
-    const newRepos = await getPythonRepos(currentFilter, source);
+    //setRepos([]);
+    const newRepos = await getContent(currentFilter, sources);
     setRepos(newRepos);
   }
 
@@ -36,180 +40,71 @@ export default function Home({ filter }) {
       const date = new Date(lastUpdated);
       setLastUpdated(`${timeSince(date)} ago`);
 
-      const newRepos = await getPythonRepos(currentFilter, currentSource);
+      const newRepos = await getContent(currentFilter, sources);
       setRepos(newRepos);
     }
     loadRepos();
   }, [currentFilter]);
 
   useEffect(() => {
+    console.log("filter", filter);
     setCurrentFilter(filter);
-    setRepos([]);
+    //setRepos([]);
   }, [filter]);
 
   return (
-    <div className={styles.container}>
-      <div>
-        <style jsx global>{`
-          body {
-            margin: 0px;
-            padding: 0px;
-          }
-        `}</style>
-      </div>
-
+    <div className="container mx-auto font-sans">
       <Head>
-        <title>Trending Python Repositories</title>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0"
-        />
-        <link rel="icon" href="/favicon.ico" />
-        <meta property="og:title" content="TrendingPython" />
-        <meta name="description" content="Trending machine learning repos" />
-        <meta name="og:image" content="/og.png" />
-        <meta property="twitter:image" content="/og.png" />
-        <meta name="twitter:card" content="summary_large_image" />
+        {/* Your Head content */}
       </Head>
 
-      <main className={styles.main}>
-        <div className={styles.header}>
-          <Link href="/" className={styles.title}>
-            TrendingPython
+      <main className="md:px-4">
+        <div className="flex justify-between items-center bg-red-600 px-4 py-2 text-md">
+          <Link href="/" className="text-white font-bold hover:underline">
+            AI News
           </Link>
-          <span
-            style={{
-              fontSize: "1.3rem",
-              paddingLeft: "0.5rem",
-              color: "white",
-            }}
-            className={styles.titleBreak}
-          >
-            |
-          </span>
-          <a
-            className={styles.what}
-            href="https://github.com/andreasjansson/python-repos#readme"
-          >
+          <a href="https://github.com/andreasjansson/python-repos#readme" className="text-white ml-4 hover:underline">
             What is this?
           </a>
-          <div className={styles.filterLinks}>
-            <Link
-              href="/?filter=past_day"
-              className={`${styles.filterButton} ${
-                currentFilter === "past_day" ? styles.selectedFilter : ""
-              }`}
-            >
+          <div className="flex items-center ml-auto">
+            <Link href="/?filter=past_day" className={`text-white ${currentFilter === "past_day" ? "underline" : ""}`}>
               Past Day
             </Link>
-            <span className={styles.separator}>|</span>
-            <Link
-              href="/?filter=past_three_days"
-              className={`${styles.filterButton} ${
-                currentFilter === "past_three_days" ? styles.selectedFilter : ""
-              }`}
-            >
-              Past Three Days
+            <span className="text-white mx-4">|</span>
+            <Link href="/?filter=past_three_days" className={`text-white ${currentFilter === "past_three_days" ? "underline" : ""}`}>
+              Past three days
             </Link>
-            <span className={styles.separator}>|</span>
-            <Link
-              href="/?filter=past_week"
-              className={`${styles.filterButton} ${
-                currentFilter === "past_week" ? styles.selectedFilter : ""
-              }`}
-            >
-              Past Week
+            <span className="text-white mx-4">|</span>
+            <Link href="/?filter=past_week" className={`text-white ${currentFilter === "past_week" || !currentFilter ? "underline" : ""}`}>
+              Past week
             </Link>
           </div>
-          <div
-            className={styles.hoverLink}
-            style={{
-              display: "flex",
-              paddingTop: "0.4rem",
-              justifyContent: "space-between",
-              fontSize: "0.8rem",
-              fontWeight: "lighter",
-            }}
-          ></div>
         </div>
-        <ul className={styles.list}>
-          {/*write a select dropdown  */}
-          <div
-            style={{
-              textDecoration: "none",
-              color: "gray",
-              fontSize: "0.8rem",
-              position: "absolute",
-              right: "0.5rem",
-              top: "0.5rem",
-            }}
-          >
-            <select
-              style={{ marginRight: "0.5rem" }}
-              defaultValue={currentSource}
-              onChange={(e) => handleSourceChange(e.target.value)}
-            >
-              <option value="all">All</option>
-              <option value="github">GitHub</option>
-              <option value="huggingface">HuggingFace</option>
-            </select>
-            <Link
-              style={{
-                textDecoration: "none",
-                color: "gray",
-              }}
-              className={styles.lastUpdated}
-              href="https://github.com/andreasjansson/python-repos/actions"
-            >
-              Last updated {lastUpdated}
-            </Link>
-          </div>
 
-          {repos.map((repo, index) => (
-            <li
-              key={repo.id}
-              className={`${styles.listItem} ${
-                index % 2 === 1 ? styles.odd : ""
-              }`}
-            >
-              <span className={styles.index}>{index + 1}. </span>
-              <div className={styles.repoContent}>
-                <div className={styles.repoTitle}>
-                  <a
-                    href={repo.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.repoLink}
-                  >
-                    {repo.username}/{repo.name}
-                  </a>
-                  <span className={styles.stars}>
-                    {repo.source === "huggingface" ? "🤗 " : "⭐ "}
-                    {repo.stars}
-                  </span>
-                </div>
-                <p className={styles.description}>{repo.description}</p>
-              </div>
-            </li>
+        <div className="text-xs flex justify-between items-center bg-table px-4 py-1">
+          <SourcePicker onSourceChange={handleSourceChange} selectedSources={sources} />
+          <Link href="https://github.com/andreasjansson/python-repos/actions" className="text-gray-500">
+            Last updated {lastUpdated}
+          </Link>
+        </div>
+
+        <ul className="bg-gray-100 relative">
+          {repos.map((post, index) => (
+            <PostRow key={post.id} post={post} index={index} />
           ))}
         </ul>
       </main>
 
-      <footer className={styles.footer}>
-        <a className={styles.footerLink} href="https://replicate.com">
+      <footer className="flex justify-center items-center py-4 border-t-2 border-red-600 md:mx-4">
+        <a href="https://replicate.com" className="text-gray-600 text-sm hover:underline">
           Built by Replicate
         </a>
-        <span className={styles.separator}>|</span>
-        <a
-          href="https://github.com/andreasjansson/python-repos"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.footerLink}
-        >
+        <span className="md:mx-4">|</span>
+        <a href="https://github.com/andreasjansson/python-repos" target="_blank" rel="noopener noreferrer" className="text-gray-600 text-sm hover:underline">
           Fork me on GitHub
         </a>
       </footer>
-    </div>
+    </div >
   );
 }
 
