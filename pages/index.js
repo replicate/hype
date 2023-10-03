@@ -60,10 +60,10 @@ export default function Home({ filter }) {
 
       <main className="md:px-4">
         <div className="flex justify-between items-center bg-red-600 px-4 py-2">
-          <Link href="/" className="text-white font-bold hover:underline text-md">
-            AI News
+          <Link href="/" className="text-white font-bold hover:underline text-md rotate-[-5deg]">
+            Hype
           </Link>
-          <a href="https://github.com/andreasjansson/python-repos#readme" className="text-white ml-4 hover:underline text-ssm">
+          <a href="https://github.com/andreasjansson/python-repos#readme" className="text-white ml-4 hover:underline text-ssm" target="_blank">
             What is this?
           </a>
           <div className="flex items-center ml-auto">

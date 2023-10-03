@@ -1,10 +1,10 @@
-# AI News
+# AI Hype
 
-https://trendingpython.com
+https://hype.replicate.dev
 
-It's really hard to keep up with open source machine learning. Since (almost) every new Python repo on GitHub is an ML repo, let's just list all the latest GitHub/HuggingFace Python repos in an easily readable format (i.e. HN-style).
+It's really hard to keep up with open source machine learning. Almost every new Python repo on GitHub is an ML repo, so we made a website that displays all the latest Python repos in a HN-like list. We also added HuggingFace models and posts from r/LocalLLaMA and r/MachineLearning.
 
-This website is updated daily by pulling the 500 most starred repos from the past week from GitHub and HuggingFace as well as the top posts from /r/MachineLearning and /r/LocalLlama. It can be filtered by repos created in the past week, past 3 days, and past day.
+The website is updated every hour.
 
 ## Development
 
@@ -24,4 +24,5 @@ vercel dev
 ```
 
 ### Want to run machine learning models yourself?
+
 Check out [Replicate](https://replicate.com). We make it easy to run, push, and scale machine learning models.
