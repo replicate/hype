@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 export const SourcePicker = ({ onSourceChange, selectedSources }) => {
-  const allSources = ['GitHub', 'HuggingFace', 'Reddit'];
+  const allSources = ["GitHub", "Replicate", "HuggingFace", "Reddit"];
 
   const handleChange = (e) => {
     const value = e.target.value;
