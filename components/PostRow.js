@@ -34,7 +34,9 @@ export const PostRow = ({ post, index }) => {
           <span className="text-gray-600 text-xs ml-1">{post.stars}</span>
         </div>
         <p className="text-gray-600 text-xs mt-0.5">
-          {post.source === "huggingface" || post.source === "github"
+          {post.source === "huggingface" ||
+          post.source === "github" ||
+          post.source == "replicate"
             ? post.description
             : `${post.username} on ${post.description}`}
         </p>
