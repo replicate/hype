@@ -14,7 +14,9 @@ export const PostRow = ({ post, index }) => {
             rel="noopener noreferrer"
             className="text-black text-ssm"
           >
-            {post.source === "huggingface" || post.source === "github"
+            {post.source === "huggingface" ||
+            post.source === "github" ||
+            post.source == "replicate"
               ? `${post.username}/${post.name}`
               : post.name}
           </a>
