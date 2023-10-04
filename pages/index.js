@@ -16,16 +16,24 @@ export default function Home({ filter }) {
 
   const [repos, setRepos] = useState([]);
   const [currentFilter, setCurrentFilter] = useState(params.filter);
-  const [sources, setSources] = useState(params.sources ? params.sources.split(",") : ["GitHub", "HuggingFace"]);
+  const [sources, setSources] = useState(
+    params.sources
+      ? params.sources.split(",")
+      : ["GitHub", "HuggingFace", "Reddit", "Replicate"]
+  );
   const [lastUpdated, setLastUpdated] = useState("");
 
   async function handleSourceChange(sources) {
     console.log("sources", sources);
 
     setSources(sources);
-    router.push({ query: { ...router.query, sources: sources.join(",") } }, undefined, {
-      shallow: true,
-    });
+    router.push(
+      { query: { ...router.query, sources: sources.join(",") } },
+      undefined,
+      {
+        shallow: true,
+      }
+    );
 
     //setRepos([]);
     const newRepos = await getContent(currentFilter, sources);
@@ -54,36 +62,64 @@ export default function Home({ filter }) {
 
   return (
     <div className="container mx-auto font-sans overflow-x-hidden">
-      <Head>
-        {/* Your Head content */}
-      </Head>
+      <Head>{/* Your Head content */}</Head>
 
       <main className="md:px-4">
         <div className="flex justify-between items-center bg-red-600 px-4 py-2">
-          <Link href="/" className="text-white font-bold hover:underline text-md rotate-[-5deg]">
+          <Link
+            href="/"
+            className="text-white font-bold hover:underline text-md rotate-[-5deg]"
+          >
             Hype
           </Link>
-          <a href="https://github.com/andreasjansson/python-repos#readme" className="text-white ml-4 hover:underline text-ssm" target="_blank">
+          <a
+            href="https://github.com/andreasjansson/python-repos#readme"
+            className="text-white ml-4 hover:underline text-ssm"
+            target="_blank"
+          >
             What is this?
           </a>
           <div className="flex items-center ml-auto">
-            <Link href="/?filter=past_day" className={`text-ssm text-white ${currentFilter === "past_day" ? "underline" : ""}`}>
+            <Link
+              href="/?filter=past_day"
+              className={`text-ssm text-white ${
+                currentFilter === "past_day" ? "underline" : ""
+              }`}
+            >
               Past day
             </Link>
             <span className="text-white sm:mx-4 mx-1">|</span>
-            <Link href="/?filter=past_three_days" className={`text-ssm text-white ${currentFilter === "past_three_days" ? "underline" : ""}`}>
+            <Link
+              href="/?filter=past_three_days"
+              className={`text-ssm text-white ${
+                currentFilter === "past_three_days" ? "underline" : ""
+              }`}
+            >
               Past three days
             </Link>
             <span className="text-white sm:mx-4 mx-1">|</span>
-            <Link href="/?filter=past_week" className={`text-ssm text-white ${currentFilter === "past_week" || !currentFilter ? "underline" : ""}`}>
+            <Link
+              href="/?filter=past_week"
+              className={`text-ssm text-white ${
+                currentFilter === "past_week" || !currentFilter
+                  ? "underline"
+                  : ""
+              }`}
+            >
               Past week
             </Link>
           </div>
         </div>
 
         <div className="text-xs flex justify-between items-center bg-table px-4 py-1">
-          <SourcePicker onSourceChange={handleSourceChange} selectedSources={sources} />
-          <Link href="https://github.com/andreasjansson/python-repos/actions" className="text-gray-500">
+          <SourcePicker
+            onSourceChange={handleSourceChange}
+            selectedSources={sources}
+          />
+          <Link
+            href="https://github.com/andreasjansson/python-repos/actions"
+            className="text-gray-500"
+          >
             Last updated {lastUpdated}
           </Link>
         </div>
@@ -96,15 +132,23 @@ export default function Home({ filter }) {
       </main>
 
       <footer className="flex justify-center items-center py-4 border-t-2 border-red-600 md:mx-4">
-        <a href="https://replicate.com" className="text-gray-600 text-sm hover:underline">
+        <a
+          href="https://replicate.com"
+          className="text-gray-600 text-sm hover:underline"
+        >
           Built by Replicate
         </a>
         <span className="md:mx-4">|</span>
-        <a href="https://github.com/andreasjansson/python-repos" target="_blank" rel="noopener noreferrer" className="text-gray-600 text-sm hover:underline">
+        <a
+          href="https://github.com/andreasjansson/python-repos"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-600 text-sm hover:underline"
+        >
           Fork me on GitHub
         </a>
       </footer>
-    </div >
+    </div>
   );
 }
 
