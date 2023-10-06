@@ -2,7 +2,7 @@
 
 https://hype.replicate.dev
 
-It's really hard to keep up with open source machine learning. Almost every new Python repo on GitHub is an ML repo, so we made a website that displays all the latest Python repos in a HN-like list. We also added Replicate and HuggingFace models, and posts from r/LocalLLaMA and r/MachineLearning.
+It's really hard to keep up with open source machine learning. Almost every new Python repo on GitHub is an ML repo, so we made a website that displays all the latest Python repos in a HN-like list. We also added Replicate and HuggingFace models, and posts from r/{LocalLLaMA,MachineLearning,StableDiffusion}.
 
 The website is updated every hour.
 
