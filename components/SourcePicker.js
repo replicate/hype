@@ -13,17 +13,20 @@ export const SourcePicker = ({ onSourceChange, selectedSources }) => {
   };
 
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center space-x-4 text-sm">
+      <span className="text-gray-600 font-medium">Show:</span>
       {allSources.map((source, index) => (
         <label key={index} className="inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
-            className="form-checkbox accent-gray-600"
+            className="w-3.5 h-3.5 text-gray-700 rounded border-gray-400 focus:ring-gray-500 focus:ring-1"
             value={source}
             checked={selectedSources.includes(source)}
             onChange={handleChange}
           />
-          <span className="ml-2">{source}</span>
+          <span className="ml-1.5 text-gray-600 hover:text-gray-800">
+            {source}
+          </span>
         </label>
       ))}
     </div>

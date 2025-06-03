@@ -65,87 +65,122 @@ export default function Home({ filter }) {
       <Head>{/* Your Head content */}</Head>
 
       <main className="md:px-4">
-        <div className="flex justify-between items-center bg-red-600 px-4 py-2">
-          <Link
-            href="/"
-            className="text-white font-bold hover:underline text-md rotate-[-5deg]"
-          >
-            Hype
-          </Link>
-          <a
-            href="https://github.com/andreasjansson/python-repos#readme"
-            className="text-white ml-4 hover:underline text-ssm"
-            target="_blank"
-          >
-            What is this?
-          </a>
-          <div className="flex items-center ml-auto">
-            <Link
-              href="/?filter=past_day"
-              className={`text-ssm text-white ${
-                currentFilter === "past_day" ? "underline" : ""
-              }`}
-            >
-              Past day
-            </Link>
-            <span className="text-white sm:mx-4 mx-1">|</span>
-            <Link
-              href="/?filter=past_three_days"
-              className={`text-ssm text-white ${
-                currentFilter === "past_three_days" ? "underline" : ""
-              }`}
-            >
-              Past three days
-            </Link>
-            <span className="text-white sm:mx-4 mx-1">|</span>
-            <Link
-              href="/?filter=past_week"
-              className={`text-ssm text-white ${
-                currentFilter === "past_week" || !currentFilter
-                  ? "underline"
-                  : ""
-              }`}
-            >
-              Past week
-            </Link>
+        <div className="bg-gradient-to-r from-pink-500 via-orange-500 to-yellow-500">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex justify-between items-center py-3">
+              <div className="flex items-center space-x-6">
+                <Link
+                  href="/"
+                  className="group"
+                >
+                  <span 
+                    className="text-white font-black text-3xl tracking-tighter transition-transform duration-300 inline-block"
+                    style={{
+                      textShadow: '2px 2px 0 rgba(0,0,0,0.2), 4px 4px 0 rgba(255,255,255,0.1)',
+                      fontFamily: 'system-ui, -apple-system, sans-serif',
+                      letterSpacing: '-0.05em',
+                      transform: 'rotate(-6deg)',
+                    }}
+                    onMouseEnter={(e) => e.target.style.transform = 'rotate(0deg)'}
+                    onMouseLeave={(e) => e.target.style.transform = 'rotate(-6deg)'}
+                  >
+                    HYPE
+                  </span>
+                </Link>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Link
+                  href="/?filter=past_day"
+                  className={`text-sm ${
+                    currentFilter === "past_day" 
+                      ? "text-white font-semibold" 
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  past day
+                </Link>
+                <span className="text-white/50">|</span>
+                <Link
+                  href="/?filter=past_three_days"
+                  className={`text-sm ${
+                    currentFilter === "past_three_days"
+                      ? "text-white font-semibold"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  past 3 days
+                </Link>
+                <span className="text-white/50">|</span>
+                <Link
+                  href="/?filter=past_week"
+                  className={`text-sm ${
+                    (currentFilter === "past_week" || !currentFilter)
+                      ? "text-white font-semibold"
+                      : "text-white/70 hover:text-white"
+                  }`}
+                >
+                  past week
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="text-xs flex justify-between items-center bg-table px-4 py-1">
-          <SourcePicker
-            onSourceChange={handleSourceChange}
-            selectedSources={sources}
-          />
-          <Link
-            href="https://github.com/andreasjansson/python-repos/actions"
-            className="text-gray-500"
-          >
-            Last updated {lastUpdated}
-          </Link>
+        <div className="bg-gradient-to-b from-gray-100 to-gray-50 border-b-2 border-gray-200">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="flex justify-between items-center py-3">
+              <SourcePicker
+                onSourceChange={handleSourceChange}
+                selectedSources={sources}
+              />
+              <Link
+                href="https://github.com/andreasjansson/python-repos/actions"
+                className="text-xs text-gray-500 hover:text-gray-700"
+              >
+                Updated {lastUpdated}
+              </Link>
+            </div>
+          </div>
         </div>
 
-        <ul className="bg-gray-100 relative">
-          {repos.map((post, index) => (
-            <PostRow key={post.id} post={post} index={index} />
-          ))}
-        </ul>
+        <div className="bg-white">
+          <div className="h-1 bg-gradient-to-b from-gray-100 to-transparent"></div>
+          <div className="max-w-6xl mx-auto">
+            <table className="w-full">
+              <tbody>
+                {repos.map((post, index) => (
+                  <PostRow key={post.id} post={post} index={index} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </main>
 
-      <footer className="flex justify-center items-center py-4 border-t-2 border-red-600 md:mx-4">
+      <footer className="mt-8 py-6 text-center text-xs text-gray-500">
+        <a
+          href="https://github.com/andreasjansson/python-repos#readme"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-orange-600"
+        >
+          What is this?
+        </a>
+        <span className="mx-2">•</span>
         <a
           href="https://replicate.com"
-          className="text-gray-600 text-sm hover:underline"
+          className="hover:text-orange-600"
         >
           Built by Replicate
         </a>
-        <span className="md:mx-4">|</span>
+        <span className="mx-2">•</span>
         <a
           href="https://github.com/andreasjansson/python-repos"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-600 text-sm hover:underline"
+          className="hover:text-orange-600"
         >
-          Fork me on GitHub
+          GitHub
         </a>
       </footer>
     </div>
