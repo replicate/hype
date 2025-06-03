@@ -15,6 +15,22 @@ export const PostRow = ({ post, index }) => {
     github: "text-gray-700"
   };
 
+  const ReplicateLogo = () => (
+    <svg 
+      version="1.1" 
+      xmlns="http://www.w3.org/2000/svg" 
+      viewBox="0 0 1000 1000" 
+      className="inline-block w-3 h-3" 
+      fill="currentColor"
+    >
+      <g>
+        <polygon points="1000,427.6 1000,540.6 603.4,540.6 603.4,1000 477,1000 477,427.6"></polygon>
+        <polygon points="1000,213.8 1000,327 364.8,327 364.8,1000 238.4,1000 238.4,213.8"></polygon>
+        <polygon points="1000,0 1000,113.2 126.4,113.2 126.4,1000 0,1000 0,0"></polygon>
+      </g>
+    </svg>
+  );
+
   return (
     <tr className="hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors duration-150">
       <td className="text-right pr-3 py-2 pl-4 align-top text-gray-500 text-sm first:pl-4">
@@ -36,7 +52,7 @@ export const PostRow = ({ post, index }) => {
           </a>
           <span className="text-gray-500 text-xs ml-2">
             (<span className={`${sourceColors[post.source] || sourceColors.github} font-medium`}>
-              {sourceLabels[post.source] || sourceLabels.github}
+              {post.source === "replicate" ? <ReplicateLogo /> : (sourceLabels[post.source] || sourceLabels.github)}
             </span>)
           </span>
         </div>
