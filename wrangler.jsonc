@@ -1,0 +1,12 @@
+{
+	"compatibility_date": "2025-01-01",
+	"main": "src/index.ts",
+	"name": "hype",
+	"upload_source_maps": true,
+	"observability": {
+		"enabled": true
+	},
+	"triggers": {
+		"crons": ["0 0 * * *"]
+	}
+}
