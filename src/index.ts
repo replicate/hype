@@ -50,7 +50,7 @@ function renderPage(postList: Post[], filter: string, sources: string[], lastUpd
   return Mustache.render(PAGE_TEMPLATE, {
     filter: filter || "past_week",
     sourcesParam: sources.join(","),
-    lastUpdated,
+    lastUpdatedTimestamp,
     posts: postList.map(preparePostData),
     filterLinks,
     sources: ALL_SOURCES.map((name) => ({
