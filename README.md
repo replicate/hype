@@ -6,7 +6,7 @@ ML/AI news aggregator from GitHub, HuggingFace, Reddit, and Replicate.
 
 ```bash
 npm install
-cp .env.example .dev.vars  # fill in values
+cp .dev.vars.example .dev.vars  # fill in values
 npm run dev
 ```
 
