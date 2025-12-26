@@ -24,7 +24,7 @@ export async function fetchReplicatePosts(env: Env): Promise<Post[]> {
 				stars: model.run_count,
 				description: model.description || "",
 				url: model.url,
-				created_at: model.created_at,
+				created_at: model.latest_version!.created_at,
 			});
 		}
 	}
