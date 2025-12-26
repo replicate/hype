@@ -80,6 +80,12 @@ const openapi = fromHono(app, {
 openapi.get("/api/posts", ListPosts);
 openapi.get("/api/last-updated", GetLastUpdated);
 
+// Manual update trigger
+app.post("/api/update", async (c) => {
+	await updateContent(c.env);
+	return c.json({ success: true });
+});
+
 export default {
 	fetch: app.fetch,
 	async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
