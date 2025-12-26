@@ -42,7 +42,8 @@ app.get("/", async (c) => {
 		.order("stars", { ascending: false })
 		.limit(500)
 		.in("source", sources.map((s) => s.toLowerCase()))
-		.or(`created_at.gt.${fromDate.toISOString()},inserted_at.gt.${fromDate.toISOString()}`);
+		.gt("created_at", fromDate.toISOString())
+		.gt("inserted_at", fromDate.toISOString());
 
 	console.log("Supabase response:", { postCount: posts?.length, error, sample: posts?.[0] });
 
