@@ -5,7 +5,6 @@ import Mustache from "mustache";
 import { ListPosts, GetLastUpdated } from "./endpoints/posts";
 import { updateContent } from "./scheduled";
 import { posts, FilterType } from "./db";
-import { timeSince } from "./utils";
 import type { Post } from "./types";
 import PAGE_TEMPLATE from "./templates/page.html";
 
