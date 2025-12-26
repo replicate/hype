@@ -1,4 +1,4 @@
-import { getSupabase } from "./supabase";
+import { posts } from "./db";
 import { fetchGitHubPosts, fetchHuggingFacePosts, fetchRedditPosts, fetchReplicatePosts } from "./fetchers";
 import type { Post } from "./types";
 
@@ -14,30 +14,16 @@ export async function updateContent(env: Env): Promise<void> {
 		fetchReplicatePosts(env),
 	]);
 
-	const posts: Post[] = [...huggingFacePosts, ...gitHubPosts, ...redditPosts, ...replicatePosts];
-	const supabase = getSupabase(env);
+	const allPosts: Post[] = [...huggingFacePosts, ...gitHubPosts, ...redditPosts, ...replicatePosts];
 
-	for (const post of posts) {
-		const { error } = await supabase.from("repositories").upsert(
-			{
-				id: post.id,
-				source: post.source,
-				username: post.username,
-				name: post.name,
-				description: post.description,
-				stars: post.stars,
-				url: post.url,
-				created_at: post.created_at,
-			},
-			{ onConflict: "id,source" }
-		);
-
-		if (error) {
-			console.error(`Error upserting post ${post.id}:`, error);
-		} else {
+	for (const post of allPosts) {
+		try {
+			await posts.upsert(env, post);
 			console.log(`Upserted post ${post.id}`);
+		} catch (err) {
+			console.error(`Error upserting post ${post.id}:`, err);
 		}
 	}
 
-	console.log(`Updated ${posts.length} posts total`);
+	console.log(`Updated ${allPosts.length} posts total`);
 }
