@@ -59,6 +59,8 @@ app.get("/", async (c) => {
 		return true;
 	});
 
+	console.log("After filtering:", { filteredCount: filtered.length });
+
 	filtered.sort((a: any, b: any) => {
 		const key = (p: any) =>
 			p.source === "reddit" ? p.stars * 0.3 : p.source === "replicate" ? Math.pow(p.stars, 0.6) : p.stars;
