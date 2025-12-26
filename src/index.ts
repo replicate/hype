@@ -34,7 +34,9 @@ app.get("/", async (c) => {
 	else if (filter === "past_three_days") fromDate.setDate(now.getDate() - 3);
 	else fromDate.setDate(now.getDate() - 7);
 
-	const { data: posts } = await supabase
+	console.log("Query params:", { filter, sources: sources.map((s) => s.toLowerCase()), fromDate: fromDate.toISOString() });
+
+	const { data: posts, error } = await supabase
 		.from("repositories")
 		.select("*")
 		.order("stars", { ascending: false })
@@ -42,6 +44,8 @@ app.get("/", async (c) => {
 		.in("source", sources.map((s) => s.toLowerCase()))
 		.gt("created_at", fromDate.toISOString())
 		.gt("inserted_at", fromDate.toISOString());
+
+	console.log("Supabase response:", { postCount: posts?.length, error });
 
 	const { data: lastUpdatedRaw } = await supabase.rpc("repositories_last_modified");
 	const lastUpdated = lastUpdatedRaw ? `${timeSince(new Date(lastUpdatedRaw))} ago` : "";
