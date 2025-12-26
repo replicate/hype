@@ -21,7 +21,7 @@ wrangler secret put REPLICATE_API_TOKEN
 npm run deploy
 ```
 
-Content updates daily via cron. Manual trigger: `wrangler triggers deploy`.
+Content updates hourly. Manual trigger: `npm run updateContent`.
 
 ## Want to run AI models yourself?
 
