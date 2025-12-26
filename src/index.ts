@@ -1,11 +1,64 @@
 import { ApiException, fromHono } from "chanfana";
 import { Hono } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
+import Mustache from "mustache";
 import { ListPosts, GetLastUpdated } from "./endpoints/posts";
 import { updateContent } from "./scheduled";
-import { getSupabase } from "./supabase";
-import { renderPage } from "./html";
+import { posts, FilterType } from "./db";
 import { timeSince } from "./utils";
+import type { Post } from "./types";
+import PAGE_TEMPLATE from "./templates/page.html";
+
+const ALL_SOURCES = ["GitHub", "Replicate", "HuggingFace", "Reddit"];
+
+interface PostData {
+	index: number;
+	displayName: string;
+	icon: string;
+	description: string;
+	url: string;
+	stars: number;
+}
+
+function preparePostData(post: Post, index: number): PostData {
+	const isRepo = post.source === "huggingface" || post.source === "github" || post.source === "replicate";
+	const displayName = isRepo ? `${post.username}/${post.name}` : post.name;
+	const icon = post.source === "huggingface" ? "🤗" : post.source === "reddit" ? "👽" : post.source === "replicate" ? "®️" : "⭐";
+	const description = isRepo ? post.description : `${post.username} on ${post.description}`;
+
+	return {
+		index: index + 1,
+		displayName,
+		icon,
+		description: description || "",
+		url: post.url,
+		stars: post.stars,
+	};
+}
+
+function renderPage(postList: Post[], filter: string, sources: string[], lastUpdated: string): string {
+	const filterLinks = [
+		{ key: "past_day", label: "Past day" },
+		{ key: "past_three_days", label: "Past three days" },
+		{ key: "past_week", label: "Past week" },
+	].map((f, i) => ({
+		...f,
+		active: filter === f.key || (!filter && f.key === "past_week"),
+		first: i === 0,
+	}));
+
+	return Mustache.render(PAGE_TEMPLATE, {
+		filter: filter || "past_week",
+		sourcesParam: sources.join(","),
+		lastUpdated,
+		posts: postList.map(preparePostData),
+		filterLinks,
+		sources: ALL_SOURCES.map((name) => ({
+			name,
+			checked: sources.includes(name),
+		})),
+	});
+}
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -20,60 +73,23 @@ app.onError((err, c) => {
 	return c.json({ success: false, errors: [{ code: 7000, message: "Internal Server Error" }] }, 500);
 });
 
-// HTML page route
 app.get("/", async (c) => {
-	const filter = c.req.query("filter") || "past_week";
+	const filter = (c.req.query("filter") || "past_week") as FilterType;
 	const sourcesParam = c.req.query("sources") || "GitHub,HuggingFace,Reddit,Replicate";
 	const sources = sourcesParam.split(",");
 
-	const supabase = getSupabase(c.env);
+	const [postList, lastUpdatedRaw] = await Promise.all([
+		posts.query(c.env, { filter, sources }),
+		posts.getLastUpdated(c.env),
+	]);
 
-	const now = new Date();
-	const fromDate = new Date();
-	if (filter === "past_day") fromDate.setDate(now.getDate() - 1);
-	else if (filter === "past_three_days") fromDate.setDate(now.getDate() - 3);
-	else fromDate.setDate(now.getDate() - 7);
-
-	console.log("Query params:", { filter, sources: sources.map((s) => s.toLowerCase()), fromDate: fromDate.toISOString() });
-
-	const { data: posts, error } = await supabase
-		.from("repositories")
-		.select("*")
-		.order("stars", { ascending: false })
-		.limit(500)
-		.in("source", sources.map((s) => s.toLowerCase()))
-		.gt("created_at", fromDate.toISOString())
-		.gt("inserted_at", fromDate.toISOString());
-
-	console.log("Supabase response:", { postCount: posts?.length, error, sample: posts?.[0] });
-
-	const { data: lastUpdatedRaw } = await supabase.rpc("repositories_last_modified");
 	const lastUpdated = lastUpdatedRaw ? `${timeSince(new Date(lastUpdatedRaw))} ago` : "";
 
-	const filtered = (posts || []).filter((p: any) => {
-		const name = p.name?.toLowerCase() || "";
-		const desc = p.description?.toLowerCase() || "";
-		const banned = ["nft", "crypto", "telegram", "clicker", "solana", "stealer"];
-		if (!p.username?.trim()) return false;
-		for (const s of banned) if (name.includes(s) || desc.includes(s)) return false;
-		if (name.includes("stake") && name.includes("predict")) return false;
-		return true;
-	});
-
-	console.log("After filtering:", { filteredCount: filtered.length });
-
-	filtered.sort((a: any, b: any) => {
-		const key = (p: any) =>
-			p.source === "reddit" ? p.stars * 0.3 : p.source === "replicate" ? Math.pow(p.stars, 0.6) : p.stars;
-		return key(b) - key(a);
-	});
-
-	return c.html(renderPage(filtered, filter, sources, lastUpdated), {
+	return c.html(renderPage(postList, filter, sources, lastUpdated), {
 		headers: { "Cache-Control": "public, max-age=300" },
 	});
 });
 
-// OpenAPI routes
 const openapi = fromHono(app, {
 	docs_url: "/docs",
 	schema: {
@@ -88,7 +104,6 @@ const openapi = fromHono(app, {
 openapi.get("/api/posts", ListPosts);
 openapi.get("/api/last-updated", GetLastUpdated);
 
-// Manual update trigger
 app.post("/api/update", async (c) => {
 	await updateContent(c.env);
 	return c.json({ success: true });
