@@ -103,10 +103,15 @@ const openapi = fromHono(app, {
 openapi.get("/api/posts", ListPosts);
 openapi.get("/api/last-updated", GetLastUpdated);
 
-app.post("/api/update", async (c) => {
+async function handleUpdate(c: { env: Env }) {
   await updateContent(c.env);
-  return c.json({ success: true });
-});
+  return { success: true };
+}
+
+app.get("/api/updateRepos", async (c) => c.json(await handleUpdate(c)));
+app.post("/api/updateRepos", async (c) => c.json(await handleUpdate(c)));
+app.get("/api/update", async (c) => c.json(await handleUpdate(c)));
+app.post("/api/update", async (c) => c.json(await handleUpdate(c)));
 
 export default {
   fetch: app.fetch,
