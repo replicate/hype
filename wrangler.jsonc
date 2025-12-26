@@ -6,9 +6,9 @@
 	"observability": {
 		"enabled": true
 	},
-	"triggers": {
-		"crons": ["0 0 * * *"]
-	},
+	// "triggers": {
+	// 	"crons": ["0 0 * * *"]
+	// },
 	// Set these via `wrangler secret put SUPABASE_URL` etc
 	"vars": {}
 }
