@@ -66,7 +66,9 @@ app.get("/", async (c) => {
 		return key(b) - key(a);
 	});
 
-	return c.html(renderPage(filtered, filter, sources, lastUpdated));
+	return c.html(renderPage(filtered, filter, sources, lastUpdated), {
+		headers: { "Cache-Control": "public, max-age=300" },
+	});
 });
 
 // OpenAPI routes
