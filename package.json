@@ -7,11 +7,13 @@
 		"@supabase/supabase-js": "^2.12.1",
 		"chanfana": "2.8.3",
 		"hono": "4.11.1",
+		"mustache": "^4.2.0",
 		"replicate": "^0.20.0",
 		"zod": "3.25.67"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "0.10.11",
+		"@types/mustache": "^4.2.6",
 		"@types/node": "24.10.1",
 		"typescript": "5.9.3",
 		"vitest": "3.2.4",
@@ -21,6 +23,7 @@
 		"cf-typegen": "wrangler types",
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
-		"test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts"
+		"test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts",
+		"updateContent": "node scripts/updateContent.js"
 	}
 }
