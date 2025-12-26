@@ -42,10 +42,9 @@ app.get("/", async (c) => {
 		.order("stars", { ascending: false })
 		.limit(500)
 		.in("source", sources.map((s) => s.toLowerCase()))
-		.gt("created_at", fromDate.toISOString())
-		.gt("inserted_at", fromDate.toISOString());
+		.or(`created_at.gt.${fromDate.toISOString()},inserted_at.gt.${fromDate.toISOString()}`);
 
-	console.log("Supabase response:", { postCount: posts?.length, error });
+	console.log("Supabase response:", { postCount: posts?.length, error, sample: posts?.[0] });
 
 	const { data: lastUpdatedRaw } = await supabase.rpc("repositories_last_modified");
 	const lastUpdated = lastUpdatedRaw ? `${timeSince(new Date(lastUpdatedRaw))} ago` : "";
