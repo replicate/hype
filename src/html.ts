@@ -1,5 +1,4 @@
 import type { Post } from "./types";
-import { timeSince } from "./utils";
 
 function postRow(post: Post, index: number): string {
 	const isRepo = post.source === "huggingface" || post.source === "github" || post.source === "replicate";
@@ -52,22 +51,21 @@ export function renderPage(posts: Post[], filter: string, sources: string[], las
 			<div class="flex items-center ml-auto">
 				${filterLinks.map((f, i) => `
 					${i > 0 ? '<span class="text-white sm:mx-4 mx-1">|</span>' : ''}
-					<a href="/?filter=${f.key}&sources=${sources.join(",")}" class="text-[0.9rem] text-white ${filter === f.key || (!filter && f.key === "past_week") ? "underline" : ""}">${f.label}</a>
+					<a href="/?filter=${f.key}&sources=${sources.join(",")}" class="text-[0.9rem] text-white ${filter === f.key || (!filter && f.key === "past_week") ? "underline" : ""}" data-navigate>${f.label}</a>
 				`).join("")}
 			</div>
 		</div>
 
 		<div class="text-xs flex justify-between items-center bg-[#f6f6ef] px-4 py-1">
-			<form id="sourceForm" class="flex items-center space-x-4">
+			<div class="flex items-center space-x-4">
 				${allSources.map((source) => `
 					<label class="inline-flex items-center cursor-pointer">
-						<input type="checkbox" class="form-checkbox accent-gray-600" name="sources" value="${source}" ${sources.includes(source) ? "checked" : ""} onchange="this.form.submit()">
+						<input type="checkbox" class="form-checkbox accent-gray-600" data-source="${source}" ${sources.includes(source) ? "checked" : ""}>
 						<span class="ml-2">${source}</span>
 					</label>
 				`).join("")}
-				<input type="hidden" name="filter" value="${filter || "past_week"}">
-			</form>
-			<a href="https://github.com/andreasjansson/python-repos/actions" class="text-gray-500">Last updated ${lastUpdated}</a>
+			</div>
+			<span class="text-gray-500">Last updated ${escapeHtml(lastUpdated)}</span>
 		</div>
 
 		<ul class="bg-gray-100 relative">
@@ -82,12 +80,41 @@ export function renderPage(posts: Post[], filter: string, sources: string[], las
 	</footer>
 
 	<script>
-		document.getElementById('sourceForm').addEventListener('submit', function(e) {
-			e.preventDefault();
-			const checked = [...this.querySelectorAll('input[name="sources"]:checked')].map(c => c.value);
-			const filter = this.querySelector('input[name="filter"]').value;
-			window.location.href = '/?filter=' + filter + '&sources=' + checked.join(',');
-		});
+		const currentFilter = "${filter || "past_week"}";
+
+		function getSelectedSources() {
+			return [...document.querySelectorAll('[data-source]:checked')].map(c => c.dataset.source);
+		}
+
+		function buildUrl(filter, sources) {
+			return '/?filter=' + filter + '&sources=' + sources.join(',');
+		}
+
+		async function navigate(url) {
+			history.pushState(null, '', url);
+			const res = await fetch(url);
+			const html = await res.text();
+			const doc = new DOMParser().parseFromString(html, 'text/html');
+			document.body.innerHTML = doc.body.innerHTML;
+			attachListeners();
+		}
+
+		function attachListeners() {
+			document.querySelectorAll('[data-source]').forEach(cb => {
+				cb.addEventListener('change', () => {
+					navigate(buildUrl(currentFilter, getSelectedSources()));
+				});
+			});
+			document.querySelectorAll('[data-navigate]').forEach(a => {
+				a.addEventListener('click', (e) => {
+					e.preventDefault();
+					navigate(a.href);
+				});
+			});
+		}
+
+		window.addEventListener('popstate', () => navigate(location.href));
+		attachListeners();
 	</script>
 </body>
 </html>`;
