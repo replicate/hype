@@ -91,6 +91,10 @@ export function renderPage(posts: Post[], filter: string, sources: string[], las
 		}
 
 		async function navigate(url) {
+			document.querySelectorAll('[data-source]').forEach(cb => {
+				cb.disabled = true;
+				cb.parentElement.style.opacity = '0.5';
+			});
 			history.pushState(null, '', url);
 			const res = await fetch(url);
 			const html = await res.text();
