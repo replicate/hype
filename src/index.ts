@@ -36,7 +36,7 @@ function preparePostData(post: Post, index: number): PostData {
   };
 }
 
-function renderPage(postList: Post[], filter: string, sources: string[], lastUpdated: string): string {
+function renderPage(postList: Post[], filter: string, sources: string[], lastUpdatedTimestamp: number | null): string {
   const filterLinks = [
     { key: "past_day", label: "Past day" },
     { key: "past_three_days", label: "Past three days" },
