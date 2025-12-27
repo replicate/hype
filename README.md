@@ -15,9 +15,13 @@ npm run dev
 ## Deploy
 
 ```bash
-wrangler secret put SUPABASE_URL
-wrangler secret put SUPABASE_ANON_KEY
+# Create D1 database and update database_id in wrangler.jsonc
+wrangler d1 create hype
+wrangler d1 execute hype --file=migrations/0001_init.sql
+
+# Set secrets
 wrangler secret put REPLICATE_API_TOKEN
+
 npm run deploy
 ```
 

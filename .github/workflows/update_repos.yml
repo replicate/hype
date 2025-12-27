@@ -23,7 +23,3 @@ jobs:
 
     - name: Call updateContent script
       run: npm run updateContent
-      env:
-        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        REPLICATE_API_TOKEN: ${{ secrets.REPLICATE_API_TOKEN }}
