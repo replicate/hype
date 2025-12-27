@@ -64,8 +64,7 @@ export const posts = {
 				description = excluded.description,
 				stars = excluded.stars,
 				url = excluded.url,
-				created_at = excluded.created_at,
-				inserted_at = datetime('now')
+				created_at = excluded.created_at
 		`;
 
 		await env.DB.prepare(query)
