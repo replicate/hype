@@ -1,11 +1,6 @@
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import type { Post } from "./types";
 
 const BANNED_STRINGS = ["nft", "crypto", "telegram", "clicker", "solana", "stealer"];
-
-function getClient(env: Env): SupabaseClient {
-	return createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY);
-}
 
 function isValidPost(post: Post): boolean {
 	const name = post.name?.toLowerCase() || "";
@@ -37,47 +32,58 @@ function getFromDate(filter: FilterType): Date {
 
 export const posts = {
 	async query(env: Env, options: { filter: FilterType; sources: string[] }): Promise<Post[]> {
-		const client = getClient(env);
 		const fromDate = getFromDate(options.filter);
 		const sourcesLower = options.sources.map((s) => s.toLowerCase());
 
-		const { data, error } = await client
-			.from("repositories")
-			.select("*")
-			.order("stars", { ascending: false })
-			.limit(500)
-			.in("source", sourcesLower)
-			.gt("created_at", fromDate.toISOString())
-			.gt("inserted_at", fromDate.toISOString());
+		const placeholders = sourcesLower.map(() => "?").join(", ");
+		const query = `
+			SELECT * FROM repositories
+			WHERE source IN (${placeholders})
+			AND created_at > ?
+			AND inserted_at > ?
+			ORDER BY stars DESC
+			LIMIT 500
+		`;
 
-		if (error) throw new Error(`Database error: ${error.message}`);
+		const { results } = await env.DB.prepare(query)
+			.bind(...sourcesLower, fromDate.toISOString(), fromDate.toISOString())
+			.all<Post>();
 
-		const filtered = (data || []).filter(isValidPost);
+		const filtered = (results || []).filter(isValidPost);
 		filtered.sort((a, b) => scorePost(b) - scorePost(a));
 		return filtered;
 	},
 
 	async upsert(env: Env, post: Post): Promise<void> {
-		const client = getClient(env);
-		const { error } = await client.from("repositories").upsert(
-			{
-				id: post.id,
-				source: post.source,
-				username: post.username,
-				name: post.name,
-				description: post.description,
-				stars: post.stars,
-				url: post.url,
-				created_at: post.created_at,
-			},
-			{ onConflict: "id,source" }
-		);
-		if (error) throw new Error(`Database error upserting ${post.id}: ${error.message}`);
+		const query = `
+			INSERT INTO repositories (id, source, username, name, description, stars, url, created_at, inserted_at)
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, datetime('now'))
+			ON CONFLICT (id, source) DO UPDATE SET
+				username = excluded.username,
+				name = excluded.name,
+				description = excluded.description,
+				stars = excluded.stars,
+				url = excluded.url,
+				created_at = excluded.created_at
+		`;
+
+		await env.DB.prepare(query)
+			.bind(
+				post.id,
+				post.source,
+				post.username,
+				post.name,
+				post.description,
+				post.stars,
+				post.url,
+				post.created_at
+			)
+			.run();
 	},
 
 	async getLastUpdated(env: Env): Promise<string | null> {
-		const client = getClient(env);
-		const { data } = await client.rpc("repositories_last_modified");
-		return data || null;
+		const query = `SELECT MAX(inserted_at) as last_updated FROM repositories`;
+		const { results } = await env.DB.prepare(query).all<{ last_updated: string | null }>();
+		return results?.[0]?.last_updated || null;
 	},
 };

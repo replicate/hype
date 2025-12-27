@@ -9,6 +9,12 @@
 	// "triggers": {
 	// 	"crons": ["0 0 * * *"]
 	// },
-	// Set these via `wrangler secret put SUPABASE_URL` etc
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "hype",
+			"database_id": "acd27ad8-c985-4ab3-b842-389aaf26530b"
+		}
+	],
 	"vars": {}
 }
